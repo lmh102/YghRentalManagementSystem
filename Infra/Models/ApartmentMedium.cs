@@ -13,6 +13,6 @@ namespace YghRentalManagementSystem.Infra.Models
         public sbyte IsDeleted { get; set; }
 
         public virtual Apartment Apartment { get; set; } = null!;
-        public virtual Medium Media { get; set; } = null!;
+        public virtual Detaillmedium Media { get; set; } = null!;
     }
 }

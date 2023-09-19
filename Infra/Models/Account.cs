@@ -6,7 +6,7 @@ namespace YghRentalManagementSystem.Infra.Models
     public partial class Account
     {
         public int Id { get; set; }
-        public Guid UserId { get; set; }
+        public string UserId { get; set; }
         public string UserName { get; set; } = null!;
         public string? Emai { get; set; }
         public string Password { get; set; } = null!;

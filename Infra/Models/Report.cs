@@ -11,7 +11,7 @@ namespace YghRentalManagementSystem.Infra.Models
         }
 
         public int Id { get; set; }
-        public Guid UserId { get; set; }
+        public string UserId { get; set; }
         public string AccomodationId { get; set; } = null!;
         public DateTime CreateAt { get; set; }
         public DateTime ModifyAt { get; set; }

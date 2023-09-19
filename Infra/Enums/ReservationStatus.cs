@@ -4,6 +4,7 @@
     {
         Pending = 0,
         NeedPay = 1,
-        Accepted =2
+        Accepted =2,
+        Rejected = 3,
     }
 }

@@ -8,14 +8,16 @@ namespace YghRentalManagementSystem.Infra.Models
         public User()
         {
             Accommondations = new HashSet<Accommondation>();
+            Apartments = new HashSet<Apartment>();
             ChatReceiveds = new HashSet<Chat>();
             ChatSendeds = new HashSet<Chat>();
             FollowUserAccoms = new HashSet<FollowUserAccom>();
             Reports = new HashSet<Report>();
-            Reservations = new HashSet<Reservation>();
+            ReservationOwners = new HashSet<Reservation>();
+            ReservationUsers = new HashSet<Reservation>();
         }
 
-        public Guid UserId { get; set; }
+        public string UserId { get; set; }
         public string FullName { get; set; } = null!;
         public string? Address { get; set; }
         public string? PhoneNumber { get; set; }
@@ -30,10 +32,12 @@ namespace YghRentalManagementSystem.Infra.Models
         public virtual Role Role { get; set; } = null!;
         public virtual Account Account { get; set; } = null!;
         public virtual ICollection<Accommondation> Accommondations { get; set; }
+        public virtual ICollection<Apartment> Apartments { get; set; }
         public virtual ICollection<Chat> ChatReceiveds { get; set; }
         public virtual ICollection<Chat> ChatSendeds { get; set; }
         public virtual ICollection<FollowUserAccom> FollowUserAccoms { get; set; }
         public virtual ICollection<Report> Reports { get; set; }
-        public virtual ICollection<Reservation> Reservations { get; set; }
+        public virtual ICollection<Reservation> ReservationOwners { get; set; }
+        public virtual ICollection<Reservation> ReservationUsers { get; set; }
     }
 }

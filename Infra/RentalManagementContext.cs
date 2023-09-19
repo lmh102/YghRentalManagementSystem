@@ -26,9 +26,9 @@ namespace YghRentalManagementSystem.Infra
         public virtual DbSet<ApartmentMedium> ApartmentMedia { get; set; } = null!;
         public virtual DbSet<ApartmentsAmenity> ApartmentsAmenities { get; set; } = null!;
         public virtual DbSet<Chat> Chats { get; set; } = null!;
+        public virtual DbSet<Detaillmedium> Detaillmedia { get; set; } = null!;
         public virtual DbSet<Estatetype> Estatetypes { get; set; } = null!;
         public virtual DbSet<FollowUserAccom> FollowUserAccoms { get; set; } = null!;
-        public virtual DbSet<Medium> Media { get; set; } = null!;
         public virtual DbSet<Notifycation> Notifycations { get; set; } = null!;
         public virtual DbSet<NotifycationFollow> NotifycationFollows { get; set; } = null!;
         public virtual DbSet<NotifycationReservation> NotifycationReservations { get; set; } = null!;
@@ -44,11 +44,11 @@ namespace YghRentalManagementSystem.Infra
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-//            if (!optionsBuilder.IsConfigured)
-//            {
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-//                optionsBuilder.UseMySql("server=localhost;port=3306;database=ygh_rental_management_system;user id=root;password=root", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.31-mysql"));
-//            }
+            if (!optionsBuilder.IsConfigured)
+            {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more stringance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseMySql("server=localhost;port=3306;database=ygh_rental_management_system;user id=root;password=root", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.31-mysql"));
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -90,8 +90,6 @@ namespace YghRentalManagementSystem.Infra
             {
                 entity.ToTable("accommondations");
 
-                entity.HasIndex(e => e.ApartmentId, "Fk_Acc_Apartment_idx");
-
                 entity.HasIndex(e => e.EstateTypesId, "ForeignKey_Accommodations_EstateTypes_idx");
 
                 entity.HasIndex(e => e.OwnerId, "ForeignKey_Accommondations_User_idx");
@@ -122,12 +120,6 @@ namespace YghRentalManagementSystem.Infra
                     .HasMaxLength(200)
                     .UseCollation("utf8mb3_general_ci")
                     .HasCharSet("utf8mb3");
-
-                entity.HasOne(d => d.Apartment)
-                    .WithMany(p => p.Accommondations)
-                    .HasForeignKey(d => d.ApartmentId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("Fk_Acc_Apartment");
 
                 entity.HasOne(d => d.EstateTypes)
                     .WithMany(p => p.Accommondations)
@@ -219,10 +211,16 @@ namespace YghRentalManagementSystem.Infra
             {
                 entity.ToTable("apartments");
 
+                entity.HasIndex(e => e.AccommondationId, "FK_Apartment_Accom_idx");
+
+                entity.HasIndex(e => e.OwnerId, "FK_Apartment_User_idx");
+
                 entity.HasIndex(e => e.Id, "Id_UNIQUE")
                     .IsUnique();
 
                 entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.AccommondationId).HasMaxLength(50);
 
                 entity.Property(e => e.CreateAt).HasColumnType("datetime");
 
@@ -237,6 +235,20 @@ namespace YghRentalManagementSystem.Infra
                     .HasMaxLength(200)
                     .UseCollation("utf8mb3_general_ci")
                     .HasCharSet("utf8mb3");
+
+                entity.Property(e => e.OwnerId).HasMaxLength(50);
+
+                entity.HasOne(d => d.Accommondation)
+                    .WithMany(p => p.Apartments)
+                    .HasForeignKey(d => d.AccommondationId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Apartment_Accom");
+
+                entity.HasOne(d => d.Owner)
+                    .WithMany(p => p.Apartments)
+                    .HasForeignKey(d => d.OwnerId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Apartment_User");
             });
 
             modelBuilder.Entity<ApartmentMedium>(entity =>
@@ -329,6 +341,25 @@ namespace YghRentalManagementSystem.Infra
                     .HasConstraintName("FK_Chat_User");
             });
 
+            modelBuilder.Entity<Detaillmedium>(entity =>
+            {
+                entity.ToTable("detaillmedia");
+
+                entity.HasIndex(e => e.Id, "Id_UNIQUE")
+                    .IsUnique();
+
+                entity.Property(e => e.CreateAt).HasColumnType("datetime");
+
+                entity.Property(e => e.Description)
+                    .HasMaxLength(200)
+                    .UseCollation("utf8mb3_general_ci")
+                    .HasCharSet("utf8mb3");
+
+                entity.Property(e => e.ModifyAt).HasColumnType("datetime");
+
+                entity.Property(e => e.Url).HasMaxLength(300);
+            });
+
             modelBuilder.Entity<Estatetype>(entity =>
             {
                 entity.ToTable("estatetypes");
@@ -380,25 +411,6 @@ namespace YghRentalManagementSystem.Infra
                     .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Follow_User");
-            });
-
-            modelBuilder.Entity<Medium>(entity =>
-            {
-                entity.ToTable("media");
-
-                entity.HasIndex(e => e.Id, "Id_UNIQUE")
-                    .IsUnique();
-
-                entity.Property(e => e.CreateAt).HasColumnType("datetime");
-
-                entity.Property(e => e.Description)
-                    .HasMaxLength(200)
-                    .UseCollation("utf8mb3_general_ci")
-                    .HasCharSet("utf8mb3");
-
-                entity.Property(e => e.ModifyAt).HasColumnType("datetime");
-
-                entity.Property(e => e.Url).HasMaxLength(300);
             });
 
             modelBuilder.Entity<Notifycation>(entity =>
@@ -573,6 +585,8 @@ namespace YghRentalManagementSystem.Infra
 
                 entity.HasIndex(e => e.ApartmentId, "FK_Reservation_Apartment_idx");
 
+                entity.HasIndex(e => e.OwnerId, "FK_Reservation_User_Owner_idx");
+
                 entity.HasIndex(e => e.UserId, "FK_User_idx");
 
                 entity.HasIndex(e => e.Id, "idReservation_UNIQUE")
@@ -581,6 +595,8 @@ namespace YghRentalManagementSystem.Infra
                 entity.Property(e => e.CreateAt).HasColumnType("datetime");
 
                 entity.Property(e => e.FromDate).HasColumnType("datetime");
+
+                entity.Property(e => e.OwnerId).HasMaxLength(50);
 
                 entity.Property(e => e.ToDate).HasColumnType("datetime");
 
@@ -594,8 +610,14 @@ namespace YghRentalManagementSystem.Infra
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Reservation_Apartment");
 
+                entity.HasOne(d => d.Owner)
+                    .WithMany(p => p.ReservationOwners)
+                    .HasForeignKey(d => d.OwnerId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Reservation_User_Owner");
+
                 entity.HasOne(d => d.User)
-                    .WithMany(p => p.Reservations)
+                    .WithMany(p => p.ReservationUsers)
                     .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Reservation_User");

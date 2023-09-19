@@ -7,7 +7,6 @@ namespace YghRentalManagementSystem.Infra.Models
     {
         public Apartment()
         {
-            Accommondations = new HashSet<Accommondation>();
             ApartmentMedia = new HashSet<ApartmentMedium>();
             ApartmentsAmenities = new HashSet<ApartmentsAmenity>();
             Reservations = new HashSet<Reservation>();
@@ -25,8 +24,11 @@ namespace YghRentalManagementSystem.Infra.Models
         public DateTime CreateAt { get; set; }
         public DateTime ModifyAt { get; set; }
         public sbyte IsDeleted { get; set; }
+        public string AccommondationId { get; set; }
+        public string OwnerId { get; set; }
 
-        public virtual ICollection<Accommondation> Accommondations { get; set; }
+        public virtual Accommondation Accommondation { get; set; } = null!;
+        public virtual User Owner { get; set; } = null!;
         public virtual ICollection<ApartmentMedium> ApartmentMedia { get; set; }
         public virtual ICollection<ApartmentsAmenity> ApartmentsAmenities { get; set; }
         public virtual ICollection<Reservation> Reservations { get; set; }

@@ -11,7 +11,7 @@ namespace YghRentalManagementSystem.Infra.Models
         }
 
         public int Id { get; set; }
-        public Guid UserId { get; set; }
+        public string UserId { get; set; }
         public int ApartmentId { get; set; }
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }
@@ -19,9 +19,11 @@ namespace YghRentalManagementSystem.Infra.Models
         public DateTime CreateAt { get; set; }
         public DateTime UpdateAt { get; set; }
         public sbyte IsDeleted { get; set; }
-        public Guid OwnerId { get; set; }
+        public string OwnerId { get; set; }
+        public int NumberRoom { get; set; }
 
         public virtual Apartment Apartment { get; set; } = null!;
+        public virtual User Owner { get; set; } = null!;
         public virtual User User { get; set; } = null!;
         public virtual ICollection<NotifycationReservation> NotifycationReservations { get; set; }
     }

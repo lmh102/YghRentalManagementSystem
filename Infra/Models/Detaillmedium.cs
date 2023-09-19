@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace YghRentalManagementSystem.Infra.Models
 {
-    public partial class Medium
+    public partial class Detaillmedium
     {
-        public Medium()
+        public Detaillmedium()
         {
             AccommodationMedia = new HashSet<AccommodationMedium>();
             ApartmentMedia = new HashSet<ApartmentMedium>();

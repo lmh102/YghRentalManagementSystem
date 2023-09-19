@@ -9,6 +9,7 @@ namespace YghRentalManagementSystem
         public DataMappingProfile()
         {
             CreateMap<Reservation, GetListReservationDTO>().ReverseMap();
+
         }
     }
 }

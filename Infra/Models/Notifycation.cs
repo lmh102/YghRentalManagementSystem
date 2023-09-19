@@ -12,7 +12,7 @@ namespace YghRentalManagementSystem.Infra.Models
         }
 
         public int Id { get; set; }
-        public Guid UserId { get; set; }
+        public string UserId { get; set; }
         public sbyte IsRead { get; set; }
         public int Type { get; set; }
         public DateTime CreateAt { get; set; }
