@@ -50,7 +50,7 @@ namespace YghRentalManagementSystem
         public static WebApplication ConfigurePipeline(this WebApplication app)
         {
             // Configure the HTTP request pipeline.
-
+            InitializeDatabase(app);
             app.UseSwagger();
             app.UseSwaggerUI();
 
